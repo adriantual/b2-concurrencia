@@ -33,3 +33,39 @@ export const obtenerProductoPorId = async (id) => {
     throw new Error('Error al obtener el producto: ' + error.message);
   }
 };
+
+// Modificar un producto existente
+export const modificarProducto = async (id, codigo, descripcion, precio, categoria, marca) => {
+  try {
+    const response = await axios.put(`${BASE_URL}/modificar/${id}`, {
+      codigo,
+      descripcion,
+      precio,
+      categoriaId: categoria,
+      marcaId: marca
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error('Error al modificar el producto: ' + error.message);
+  }
+};
+
+export const listarCategorias = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/categorias`);
+    return response.data;
+  } catch (error) {
+    console.error('Error al listar las categorías:', error);
+    throw new Error('Error al listar las categorías: ' + error.message);
+  }
+};
+
+export const listarMarcas = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/marcas`);
+    return response.data;
+  } catch (error) {
+    console.error('Error al listar las marcas:', error);
+    throw new Error('Error al listar las marcas: ' + error.message);
+  }
+};

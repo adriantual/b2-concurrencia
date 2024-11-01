@@ -1,8 +1,12 @@
 package ar.unrn.tp.model;
 
 import jakarta.persistence.*;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 @Entity
+
+@NoArgsConstructor
 public class NextNumber {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -11,8 +15,6 @@ public class NextNumber {
     private int anio;
     private int numeroActual;
 
-    @Version
-    private Long version;  // Control de concurrencia optimista
 
     public NextNumber(int anio) {
         this.anio = anio;

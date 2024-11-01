@@ -51,7 +51,7 @@ public class JPAProductoService implements ProductoService {
             Marca nuevaMarca= em.find(Marca.class, marca);
             Producto producto = em.getReference(Producto.class, idProducto);
 
-            if(Objects.equals(producto.getVersion(), version))
+            if(!Objects.equals(producto.getVersion(), version))
                 throw new OptimisticLockException();
 
             producto.setCodigo(Integer.parseInt(codigo));

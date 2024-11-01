@@ -2,18 +2,19 @@ package ar.unrn.tp.model.DTO;
 
 
 
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 import java.util.List;
 
+@NoArgsConstructor
 public class VentaDTO {
     private Long clienteId;
     private LocalDate fecha;
     private List<Long> productos;
     private double total;
     private Long medioDePagoId;
-
-    public VentaDTO() {
-    }
 
     public VentaDTO(Long clienteId, LocalDate fecha, List<Long> productos, Long medioDePagoId) {
         this.clienteId = clienteId;

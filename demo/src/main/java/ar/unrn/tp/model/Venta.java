@@ -1,6 +1,7 @@
 package ar.unrn.tp.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Entity
 @NoArgsConstructor
+@Getter
 public class Venta {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
@@ -41,23 +43,16 @@ public class Venta {
 
     }
 
-    public String getNumeroUnico() {
-        return numeroUnico;
-    }
 
     public void setNumeroUnico(String numeroUnico) {
         this.numeroUnico = numeroUnico;
     }
 
-    public double getTotal() {
-        return total;
-    }
+
 
     public List<Producto> productosComprados() {
         return productos;
     }
 
-    public Cliente getCliente() {
-        return cliente;
-    }
+
 }

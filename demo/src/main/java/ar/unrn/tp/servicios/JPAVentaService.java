@@ -140,4 +140,22 @@ public class JPAVentaService implements VentaService {
         em.persist(nextNumber);
         return numero + "-" + anioActual;
     }
+
+
+    @Transactional
+    public List<Venta> obtenerUltimasVentasCliente(Long idCliente, int limit) {
+        return em.createQuery("SELECT v FROM Venta v WHERE v.cliente.id = :idCliente ORDER BY v.fechaYHora DESC", Venta.class)
+                .setParameter("idCliente", idCliente)
+                .setMaxResults(limit)
+                .getResultList();
+    }
+
+    @Transactional
+    public void registrarVenta(Venta nuevaVenta) {
+        em.persist(nuevaVenta);
+    }
+
+
+
+
 }

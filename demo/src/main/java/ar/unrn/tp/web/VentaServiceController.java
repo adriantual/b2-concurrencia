@@ -5,6 +5,7 @@ import ar.unrn.tp.model.DTO.VentaDTO;
 import ar.unrn.tp.model.DTO.DetalleVentaDTO;
 import ar.unrn.tp.model.Venta;
 import ar.unrn.tp.servicios.CacheService;
+import ar.unrn.tp.servicios.ComprasService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,8 @@ import java.util.List;
 @RequestMapping("/ventas")
 public class VentaServiceController {
 
+    @Autowired
+    private ComprasService ultimasComprasService;
     @Autowired
     private VentaService ventaService;
     @Autowired
@@ -63,18 +66,18 @@ public class VentaServiceController {
     public ResponseEntity<List<Venta>> obtenerUltimasVentas(@PathVariable Long idCliente) {
         List<Venta> ultimasVentas = cacheService.obtenerUltimasVentas(idCliente);
         return ResponseEntity.ok(ultimasVentas);
-    }
+    }*/
 
     @GetMapping("/{idCliente}/ultimas-ventas")
-    public ResponseEntity<List<VentaDTO>> obtenerUltimasVentas(@PathVariable Long idCliente) {
+    public ResponseEntity<List<Venta>> obtenerUltimasVentas(@PathVariable Long idCliente) {
         List<Venta> ultimasVentas = cacheService.obtenerUltimasVentas(idCliente);
 
-        List<VentaDTO> ventasDTO = ultimasVentas.stream()
-                .map(VentaDTO::new)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(ventasDTO);
+       // List<VentaDTO> ventasDTO = ultimasVentas.stream()
+        //        .map(VentaDTO::new)
+         //       .collect(Collectors.toList());
+        return ResponseEntity.ok(ultimasVentas);
     }
-*/
+
 
     // Calcular total de la compra
     @PostMapping("/calcular-total")
@@ -109,5 +112,14 @@ public class VentaServiceController {
         }
     }
 
+
+//redis
+
+
+    @GetMapping("/ultimas/{idCliente}")
+    public ResponseEntity<List<Venta>> obtenerUltimasCompras(@PathVariable Long idCliente) {
+        List<Venta> ultimasVentas = ultimasComprasService.obtenerUltimasCompras(idCliente);
+        return ResponseEntity.ok(ultimasVentas);
+    }
 
 }

@@ -3,10 +3,7 @@ package ar.unrn.tp.web;
 import ar.unrn.tp.api.ClienteService;
 import ar.unrn.tp.model.Cliente;
 import ar.unrn.tp.model.DTO.ClienteDTO;
-import ar.unrn.tp.model.DTO.ClienteDTO2;
 import ar.unrn.tp.model.DTO.TarjetaDTO;
-import ar.unrn.tp.model.Producto;
-import ar.unrn.tp.servicios.JPAClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -53,16 +50,7 @@ public class ClienteServiceController {
         }
     }
 
-    // Listar tarjetas de un cliente
-    /*@GetMapping("/{idCliente}/tarjetas")
-    public ResponseEntity<List> listarTarjetas(@PathVariable Long idCliente) {
-        try {
-            List tarjetas = clienteService.listarTarjetas(idCliente);
-            return ResponseEntity.ok(tarjetas);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
-        }
-    }*/
+
 
     @GetMapping("/{idCliente}/tarjetas")
     public ResponseEntity<List<TarjetaDTO>> listarTarjetas(@PathVariable Long idCliente) {
@@ -87,26 +75,16 @@ public class ClienteServiceController {
         }
     }
 
-/*
-    @GetMapping("/listar")
-    public ResponseEntity<List<Cliente>> listarClientes() {
-        try {
-            List<Cliente> clientes = clienteService.listarClientes();
-            return ResponseEntity.ok(clientes);
-        } catch (Exception e) {
 
-            return ResponseEntity.badRequest().body(null);
-        }
-    }*/
 
     @GetMapping("/listar")
-    public ResponseEntity<List<ClienteDTO2>> listarClientes() {
+    public ResponseEntity<List<ClienteDTO>> listarClientes() {
         try {
             List<Cliente> clientes = clienteService.listarClientes();
 
             // Convertimos cada Cliente en un ClienteDTO
-            List<ClienteDTO2> clienteDTOs = clientes.stream()
-                    .map(cliente -> new ClienteDTO2(cliente.getId(), cliente.getNombre(), cliente.getApellido(), String.valueOf(cliente.getDni()) , cliente.getEmail()))
+            List<ClienteDTO> clienteDTOs = clientes.stream()
+                    .map(cliente -> new ClienteDTO(cliente.getId(), cliente.getNombre(), cliente.getApellido(), String.valueOf(cliente.getDni()) , cliente.getEmail()))
                     .toList();
 
             return ResponseEntity.ok(clienteDTOs);

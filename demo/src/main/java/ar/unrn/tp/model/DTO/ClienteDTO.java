@@ -1,7 +1,13 @@
 package ar.unrn.tp.model.DTO;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
+
+@Builder
+@Getter
+@Setter
 public class ClienteDTO {
 
     private Long  id;
@@ -9,16 +15,15 @@ public class ClienteDTO {
     private String apellido;
     private String dni;
     private String email;
-
-    public ClienteDTO(String nombre, String apellido, String dni, String email) {
+    public ClienteDTO(Long  id,String nombre, String apellido, String dni, String email) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.dni = dni;
         this.email = email;
+        this.id=id;
     }
 
-
-
+/*
 
     public Long getId() {
         return id;
@@ -42,5 +47,5 @@ public class ClienteDTO {
 
     public String getEmail() {
         return email;
-    }
+    }*/
 }

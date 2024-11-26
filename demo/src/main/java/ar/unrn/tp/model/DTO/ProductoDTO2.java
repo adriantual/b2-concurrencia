@@ -1,8 +1,12 @@
 package ar.unrn.tp.model.DTO;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
+@Builder
 @Getter
+@Setter
 public class ProductoDTO2 {
     private Long id;
     private int codigo;
@@ -29,7 +33,13 @@ public class ProductoDTO2 {
         this.version=version;
     }
 
+    public ProductoDTO2(int codigo, String descripcion, double precio, double porcentajeDeDescuento) {
+        this.codigo = codigo;
+        this.descripcion = descripcion;
+        this.precio = precio;
+        this.porcentajeDeDescuento = porcentajeDeDescuento;
 
+    }
 
 
     public Long getId() {

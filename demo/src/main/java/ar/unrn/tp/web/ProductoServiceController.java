@@ -5,7 +5,6 @@ import ar.unrn.tp.exception.CustomConcurrencyException;
 import ar.unrn.tp.model.Categoria;
 import ar.unrn.tp.model.DTO.CategoriaDTO;
 import ar.unrn.tp.model.DTO.MarcaDTO;
-import ar.unrn.tp.model.DTO.ProductoDTO;
 import ar.unrn.tp.model.DTO.ProductoDTO2;
 import ar.unrn.tp.model.Marca;
 import ar.unrn.tp.model.Producto;
@@ -25,9 +24,8 @@ public class ProductoServiceController {
 
     // Crear un nuevo producto
     @PostMapping("/crear")
-    public ResponseEntity<String> crearProducto(@RequestBody ProductoDTO request) {
+    public ResponseEntity<String> crearProducto(@RequestBody ProductoDTO2 request) {
         try {
-            //esta bien hacer esto o estoy rompiendo las capaz?
 
             productoService.crearProducto(request.getCodigo(), request.getDescripcion(), request.getPrecio(), request.getCategoriaId(), request.getMarcaId());
             return ResponseEntity.ok("Producto creado exitosamente");
@@ -38,7 +36,7 @@ public class ProductoServiceController {
 
     // Modificar un producto existente
     @PutMapping("/modificar/{id}")
-    public ResponseEntity<String> modificarProducto(@PathVariable Long id, @RequestBody ProductoDTO request) {
+    public ResponseEntity<String> modificarProducto(@PathVariable Long id, @RequestBody ProductoDTO2 request) {
         try {
 
             productoService.modificarProducto(id, request.getCodigo(), request.getDescripcion(), request.getPrecio(), request.getCategoriaId(), request.getMarcaId(),request.getVersion());

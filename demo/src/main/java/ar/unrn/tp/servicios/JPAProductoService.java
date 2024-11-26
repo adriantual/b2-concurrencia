@@ -28,13 +28,13 @@ public class JPAProductoService implements ProductoService {
 
     @Override
     @Transactional
-    public void crearProducto (String codigo, String descripcion, double precio, Long categoria, Long marca){
+    public void crearProducto (int codigo, String descripcion, double precio, Long categoria, Long marca){
 
 
         try {
             Categoria nuevaCategoria= em.find(Categoria.class, categoria);
             Marca nuevaMarca= em.find(Marca.class, marca);
-            Producto producto = new Producto(Integer.parseInt(codigo), descripcion, nuevaCategoria, precio,nuevaMarca);
+            Producto producto = new Producto(codigo, descripcion, nuevaCategoria, precio,nuevaMarca);
             em.persist(producto);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -44,7 +44,7 @@ public class JPAProductoService implements ProductoService {
 
     @Override
     @Transactional
-    public void modificarProducto(Long idProducto, String codigo, String descripcion,  double precio,  Long categoria, Long marca,Long version) {
+    public void modificarProducto(Long idProducto, int codigo, String descripcion,  double precio,  Long categoria, Long marca,Long version) {
         try {
 
             Categoria nuevaCategoria= em.find(Categoria.class, categoria);
@@ -54,7 +54,7 @@ public class JPAProductoService implements ProductoService {
             if(!Objects.equals(producto.getVersion(), version))
                 throw new OptimisticLockException();
 
-            producto.setCodigo(Integer.parseInt(codigo));
+            producto.setCodigo(codigo);
             producto.setDescripcion(descripcion);
             producto.setPrecio(precio);
             producto.setCategoria(nuevaCategoria);

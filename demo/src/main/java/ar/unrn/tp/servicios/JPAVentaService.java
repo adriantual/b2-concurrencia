@@ -22,12 +22,11 @@ public class JPAVentaService implements VentaService {
     private  ClienteService clienteService;
     @Autowired
     private DescuentoService descuentoService;
-    @Autowired
-    private CacheService cacheService;
+
 
     @Override
     @Transactional
-    public void realizarVenta(Long idCliente, List<Long> productos, Long idTarjeta) {
+    public Venta realizarVenta(Long idCliente, List<Long> productos, Long idTarjeta) {
 
         try {
 
@@ -43,14 +42,11 @@ public class JPAVentaService implements VentaService {
             String numeroUnico = generarNumeroUnico();
 
 
-
-            // Pasamos numeroUnico a procesoDePago
             Venta venta = carrito.procesoDePago(tarjeta, numeroUnico);
-            // Actualizar caché con la nueva venta
-            cacheService.agregarVenta(cliente.getId(), venta);
 
 
             em.persist(venta);
+            return venta;
 
         } catch (Exception  e){
             throw new RuntimeException ("No se econtraron resultados para el id de cliente o la tarjeta: " + e.getMessage());
@@ -135,6 +131,7 @@ public class JPAVentaService implements VentaService {
         }
 
         // Obtenemos el siguiente número y lo formateamos como N-AÑO
+
 
         int numero = nextNumber.recuperarSiguiente();
         em.persist(nextNumber);

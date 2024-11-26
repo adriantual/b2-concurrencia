@@ -2,17 +2,16 @@ package ar.unrn.tp.web;
 
 import ar.unrn.tp.api.VentaService;
 import ar.unrn.tp.model.DTO.VentaDTO;
-import ar.unrn.tp.model.DTO.DetalleVentaDTO;
+import ar.unrn.tp.model.DTO.VentaFrontEndDTO;
 import ar.unrn.tp.model.Venta;
-import ar.unrn.tp.servicios.CacheService;
 import ar.unrn.tp.servicios.ComprasService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.stream.Collectors;
 
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -23,61 +22,18 @@ public class VentaServiceController {
     private ComprasService ultimasComprasService;
     @Autowired
     private VentaService ventaService;
-    @Autowired
-    private CacheService cacheService;
 
-    // Registrar una venta
-    @PostMapping("/registrar")
-    public ResponseEntity<String> registrarVenta(@RequestBody VentaDTO request) {
-        try {
-            ventaService.realizarVenta(request.getClienteId(),request.getProductos(), request.getMedioDePagoId());
-             return ResponseEntity.ok("Venta registrada exitosamente");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al registrar la venta: " + e.getMessage());
-        }
+
+
+    @GetMapping("/ultimas/{idCliente}")
+    public ResponseEntity<List<VentaFrontEndDTO>> obtenerUltimasCompras(@PathVariable Long idCliente) {
+        List<Venta> ultimasVentas = ultimasComprasService.obtenerUltimasCompras(idCliente);
+        List<VentaFrontEndDTO> ventasDTO = ultimasVentas.stream()
+                .map(VentaFrontEndDTO::convertirDesdeVentas) // Convierte cada Venta en un VentaDTO
+                .collect(Collectors.toList()); // Colecta el resultado en una lista
+
+        return ResponseEntity.ok(ventasDTO);
     }
-
-
-/*
-    // Consultar una venta por ID
-    @GetMapping("/{id}")
-    public ResponseEntity<VentaDTO> obtenerVenta(@PathVariable Long id) {
-        try {
-            VentaDTO venta = ventaService.obtenerVentaPorId(id);
-            return ResponseEntity.ok(venta);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
-        }
-    }
-
-    // Consultar todas las ventas
-    @GetMapping("/todas")
-    public ResponseEntity<List<VentaDTO>> obtenerTodasLasVentas() {
-        try {
-            List<VentaDTO> ventas = ventaService.obtenerTodasLasVentas();
-            return ResponseEntity.ok(ventas);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
-        }
-    }
-
-
-    @GetMapping("/{idCliente}/ultimas-ventas")
-    public ResponseEntity<List<Venta>> obtenerUltimasVentas(@PathVariable Long idCliente) {
-        List<Venta> ultimasVentas = cacheService.obtenerUltimasVentas(idCliente);
-        return ResponseEntity.ok(ultimasVentas);
-    }*/
-
-    @GetMapping("/{idCliente}/ultimas-ventas")
-    public ResponseEntity<List<Venta>> obtenerUltimasVentas(@PathVariable Long idCliente) {
-        List<Venta> ultimasVentas = cacheService.obtenerUltimasVentas(idCliente);
-
-       // List<VentaDTO> ventasDTO = ultimasVentas.stream()
-        //        .map(VentaDTO::new)
-         //       .collect(Collectors.toList());
-        return ResponseEntity.ok(ultimasVentas);
-    }
-
 
     // Calcular total de la compra
     @PostMapping("/calcular-total")
@@ -103,23 +59,34 @@ public class VentaServiceController {
 
     // Listar ventas de un cliente específico
     @GetMapping("/cliente/{idCliente}/ventas")
-    public ResponseEntity<List> listarVentasPorCliente(@PathVariable Long idCliente) {
+    public ResponseEntity<List<VentaFrontEndDTO>> listarVentasPorCliente(@PathVariable Long idCliente) {
         try {
-            List ventasCliente = ventaService.ventasPorCliente(idCliente);
-            return ResponseEntity.ok(ventasCliente);
+            List<Venta> ventasCliente = ventaService.ventasPorCliente(idCliente);
+            List<VentaFrontEndDTO> ventasDTO = ventasCliente.stream()
+                    .map(VentaFrontEndDTO::convertirDesdeVentas) // Convierte cada Venta en un VentaDTO
+                    .collect(Collectors.toList()); // Colecta el resultado en una lista
+
+            return ResponseEntity.ok(ventasDTO);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().body(null);
         }
     }
 
 
-//redis
 
-
-    @GetMapping("/ultimas/{idCliente}")
-    public ResponseEntity<List<Venta>> obtenerUltimasCompras(@PathVariable Long idCliente) {
-        List<Venta> ultimasVentas = ultimasComprasService.obtenerUltimasCompras(idCliente);
-        return ResponseEntity.ok(ultimasVentas);
+    @PostMapping("/registrar")
+    public ResponseEntity<String> registrarVenta(@RequestBody VentaDTO request) {
+        try {
+            //ventaService.realizarVenta(request.getClienteId(),request.getProductos(), request.getMedioDePagoId());
+            ultimasComprasService.registrarNuevaCompra(request.getClienteId(),request.getProductos(), request.getMedioDePagoId());
+            return ResponseEntity.ok("Venta registrada exitosamente");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error al registrar la venta: " + e.getMessage());
+        }
     }
+
+
+
 
 }

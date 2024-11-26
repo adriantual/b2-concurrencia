@@ -1,16 +1,28 @@
 package ar.unrn.tp.model.DTO;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
+@Builder
+@Getter
+@Setter
 public class TarjetaDTO {
     private Long id;
     private int nro;
     private String marca;
 
-
+/*
     public TarjetaDTO(int nro, String marca) {
         this.nro = nro;
         this.marca = marca;
     }
-
+*/
+    public TarjetaDTO(Long id, int nro, String marca) {
+        this.id = id;
+        this.nro = nro;
+        this.marca = marca;
+    }
 
 
     public Long getId() {

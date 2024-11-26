@@ -11,7 +11,7 @@ public interface VentaService {
 // - debe ser un cliente existente
 // - la lista de productos no debe estar vacía
     // - La tarjeta debe pertenecer al cliente
-    void realizarVenta(Long idCliente, List<Long> productos, Long idTarjeta);
+    Venta realizarVenta(Long idCliente, List<Long> productos, Long idTarjeta);
 
 
     //Devuelve el monto total aplicando los descuentos al día de la fecha

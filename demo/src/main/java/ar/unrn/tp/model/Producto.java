@@ -2,6 +2,7 @@ package ar.unrn.tp.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.Objects;
@@ -9,6 +10,7 @@ import java.util.Objects;
 @Entity
 @NoArgsConstructor
 @Data
+@Getter
 public class Producto {
 
     @Id

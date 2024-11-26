@@ -4,19 +4,15 @@ import ar.unrn.tp.api.ClienteService;
 import ar.unrn.tp.exception.ClienteException;
 import ar.unrn.tp.model.Cliente;
 import ar.unrn.tp.model.DTO.TarjetaDTO;
-import ar.unrn.tp.model.DTO.TarjetaDTO2;
-import ar.unrn.tp.model.Producto;
 import ar.unrn.tp.model.Tarjeta;
 
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,7 +25,6 @@ public class JPAClienteService implements ClienteService {
 
     @Override
     @Transactional
-    //con transactional tenes que sacar los try y catch ya que se encarga solo de hacer la transaccion
     public void crearCliente(String nombre, String apellido, String dni, String email) {
 
         if (dniRepetido(Integer.parseInt(dni))) {
@@ -38,8 +33,6 @@ public class JPAClienteService implements ClienteService {
 
             Cliente nuevoCliente = new Cliente(nombre, apellido, Integer.parseInt(dni), email);
             em.persist(nuevoCliente);
-
-
     }
     private boolean dniRepetido(int dni) {
         List<Cliente> clientes = em.createQuery("SELECT c FROM Cliente c WHERE c.dni = :dni", Cliente.class)
@@ -93,7 +86,7 @@ public class JPAClienteService implements ClienteService {
         clienteExistente(cliente);
         //return cliente.getTarjetas();
         return cliente.getTarjetas().stream()
-                .map(tarjeta -> new TarjetaDTO2(tarjeta.getId(), tarjeta.getNro(),tarjeta.marca()))
+                .map(tarjeta -> new TarjetaDTO(tarjeta.getId(), tarjeta.getNro(),tarjeta.marca()))
                 .collect(Collectors.toList());
 
 

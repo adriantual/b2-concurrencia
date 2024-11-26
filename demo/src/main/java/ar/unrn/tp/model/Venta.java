@@ -49,6 +49,8 @@ public class Venta {
     }
 
 
+    public Long tarjeta()
+    {return this.tarjeta.getId();}
 
     public List<Producto> productosComprados() {
         return productos;
